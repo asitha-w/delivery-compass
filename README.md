@@ -10,40 +10,57 @@ It is read-only by default, and it never sends a message to anyone without showi
 
 ## The sixty-second version
 
-Meet **Cart2Door**, a (fictional) online-shopping delivery company. Maya is the product manager, Daniel manages delivery. Neither of them writes code. Every morning, instead of a standup, Maya asks the compass:
+Meet **Cart2Door**, a (fictional) online-shopping delivery company. Maya is the product manager, Daniel is the delivery manager. Neither of them writes code. The team works AI-DLC style: business goals are captured as **Intents**, broken into **Units** of work, built in **Bolts** — changes that take hours or days, each passing a human **decision juncture** (a review, an approval) before it ships.
+
+### Maya's morning — the PM lens: *are my Intents healthy?*
 
 > **Maya:** what needs my attention today?
 
 ```
 ## Compass — Monday
 
-Needle: D4 Staleness — 11 issues assigned but untouched for 5+ days.
+Needle: D4 Staleness — 11 Units assigned but untouched for 5+ days.
 
-| Dimension                       | Waiting | Oldest | Stuck |
-|---------------------------------|---------|--------|-------|
-| D1 Review queue                 | 3       | 9d     | 1     |
-| D2 Author queue                 | 1       | 4d     | 0     |
-| D3 Merge queue (approved, idle) | 1       | 12d    | 1     |
-| D4 Staleness                    | 11      | 6w     | 11    |
+| Dimension                          | Waiting | Oldest | Stuck |
+|------------------------------------|---------|--------|-------|
+| D1 Review queue (Bolts at juncture)| 3       | 9d     | 1     |
+| D2 Author queue                    | 1       | 4d     | 0     |
+| D3 Merge queue (approved, idle)    | 1       | 12d    | 1     |
+| D4 Staleness (Units stopped)       | 11      | 6w     | 11    |
 
 Where to look first:
-1. The "courier notifications revamp" — 9 issues assigned to Jonas,
-   no activity for 6 weeks. The board says in-flight; the work says stopped.
-2. courier-app PR #214 "live map on delivery screen" — approved 12 days
-   ago, never released. The decision was made; the action is missing.
-3. checkout PR #389 "discount codes at checkout" — waiting 9 days for
-   review, and no reviewer was ever assigned.
+1. The "courier notifications revamp" Intent — 9 Units assigned to
+   Jonas, no activity for 6 weeks. The board says in-flight; the work
+   says stopped.
+2. courier-app Bolt #214 "live map on delivery screen" — cleared its
+   review juncture 12 days ago (approved), never shipped. The decision
+   was made; the action is missing.
+3. checkout Bolt #389 "discount codes at checkout" — waiting at its
+   review juncture for 9 days, and no decision owner was ever assigned.
+   It blocks the spring-campaign Intent.
 ```
 
 > **Maya:** why is the discount codes one stuck?
 >
-> **Compass:** Priya opened it 9 days ago. No reviewer was assigned, and nobody has looked at it. It blocks the spring-campaign launch issue you flagged as a priority. The single unblocking action: someone with review rights on `checkout` (Sam or Elena) needs to review it. Want me to draft a nudge?
+> **Compass:** Priya opened it 9 days ago. No reviewer was assigned, so it sits at its review juncture with no decision owner — nobody's queue contains it. It blocks the spring-campaign Intent you flagged as a priority. The single unblocking action: someone with review rights on `checkout` (Sam or Elena) reviews it. Want me to draft a nudge?
 >
 > **Maya:** yes, show me.
 >
-> **Compass:** I'd post this comment on checkout PR #389 — *"@sam-c2d @elena-c2d — this PR has been waiting on review for 9 working days and blocks the spring campaign launch. Could one of you pick it up, or should the review be reassigned?"* — Post, edit, or skip?
+> **Compass:** I'd post this comment on checkout #389 — *"@sam-c2d @elena-c2d — this change has been waiting on review for 9 working days and blocks the spring campaign launch. Could one of you pick it up, or should the review be reassigned?"* — Post, edit, or skip?
 
-No standup was held to produce this. Nobody filled in a status report. The information was already in the system — the compass just reads it at the altitude a manager needs.
+### Daniel's afternoon — the DM lens: *is the flow healthy?*
+
+> **Daniel:** how is our flow this week?
+>
+> **Compass:** Healthy where work is active, with three structural warnings:
+>
+> 1. **Decision latency on active Bolts is excellent** — the median Bolt clears its review juncture in 5 hours. The system is fast when a decision owner exists.
+> 2. **Review load is concentrated** — Sam made 9 of this week's 11 review decisions. One busy week for Sam and every queue backs up. That's your single point of failure, and it will tighten as AI raises Bolt volume.
+> 3. **WIP is overstated 3×** — 16 Units are open-and-assigned but only 5 moved this week. Most of the gap is the parked notifications Intent. Until it's explicitly parked or closed, real stalls can hide among the noise.
+>
+> Suggested moves: spread review rights on `checkout`, and get a park-or-close decision on the notifications Intent.
+
+No standup was held to produce any of this. Nobody filled in a status report. The information was already in the system — the compass just reads it at the altitude each manager needs.
 
 The rest of this README explains *why* this is the right way to run delivery management when AI is doing a large share of the building — and why the old instruments stopped working.
 
