@@ -74,7 +74,13 @@ This worked. It was the best available answer when work moved at human typing sp
 
 Two shifts are happening at once.
 
-**1. AIDLC — the AI-Driven Development Lifecycle** (defined by AWS, [whitepaper](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/), [open-source workflows](https://github.com/awslabs/aidlc-workflows)). Work decomposes as **Intent → Units → Bolts**, where a *Bolt* is the new iteration unit — measured in **hours or days, not weeks**. AI does the decomposition, planning, and most of the generation; humans validate at decision points. Ceremonies collapse into working sessions (Mob Elaboration, Mob Construction) that happen *when needed*, not on a calendar.
+**1. AI-DLC — the AI-Driven Development Lifecycle** (defined by AWS: [method definition](https://prod.d13rzhkk8cj2z0.amplifyapp.com/), [blog](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/), [open-source workflows](https://github.com/awslabs/aidlc-workflows)). The method runs in three phases — **Inception, Construction, Operations** — and gives the work a new vocabulary:
+
+- An **Intent** is a high-level statement of purpose: a business goal, a feature, a technical outcome. It's where everything starts.
+- A **Unit** is a cohesive, self-contained work element derived from an Intent — loosely coupled so it can be built and deployed independently (roughly where an epic used to sit).
+- A **Bolt** is the smallest iteration — the AI-DLC successor to the sprint, deliberately renamed because it is measured in **hours or days, not weeks**.
+
+AI does the decomposition (Intent → Units → Bolts), the planning, and most of the generation; humans validate at **decision junctures**. The calendar ceremonies collapse into intense working sessions — **Mob Elaboration** (requirements, in Inception) and **Mob Construction** (build, in Construction) — that happen *when needed*, not on a schedule.
 
 **2. FDE — Forward Deployed Engineering** (invented at Palantir, now the dominant delivery model for applied AI at OpenAI, Google, and others). Engineers embed with the customer; scope emerges on-site; iteration is continuous. There is no backlog ceremony because there is no backlog in the classical sense — there is a live conversation with the problem.
 
@@ -90,9 +96,11 @@ A human can't read forty repositories before coffee. An AI assistant can. That i
 
 ## The new bottleneck: decision latency
 
-When AI generates work in hours, delivery does not stall in development anymore. It stalls at the points where a **human must decide**: review this, approve that, validate this output, merge that change, confirm this scope.
+AI-DLC is explicit that humans remain in charge of judgement: at every step, human oversight functions — in the whitepaper's own words — **"like a loss function"**, catching and correcting errors at **decision junctures** before they snowball downstream. Review this Bolt, validate that domain model, approve this deployment, confirm that scope.
 
-**Decision latency** — how long artefacts sit waiting at human decision points — replaces velocity as the primary delivery-health signal. It is measurable today, from data your team already produces, with no new process imposed on anyone.
+That design choice has a consequence the method itself doesn't instrument: when AI generates work in hours, delivery no longer stalls in development. It stalls **at the junctures** — waiting for the human decision.
+
+**Decision latency** — how long artefacts sit waiting at decision junctures — replaces velocity as the primary delivery-health signal. It is measurable today, from data your team already produces, with no new process imposed on anyone.
 
 And it comes with a warning the old world never had: AI makes *starting* work nearly free. The new failure mode is not "too slow" — it is **twenty things 80% done**, each waiting on a human decision nobody is tracking. Watching the decision queues is how you catch it.
 
@@ -102,10 +110,10 @@ Often the same person wears both hats — which is why the compass doesn't ask y
 
 | | Project / Product Manager | Delivery Manager |
 |---|---|---|
-| **Core question** | Is the *intent* progressing, and is what's being built still what was asked? | Is the *flow* healthy, and where is it breaking? |
+| **Core question** | Is each *Intent* progressing, and is what's being built still what was asked? | Is the *flow* healthy, and where is it breaking? |
 | **Watched before** | Backlog grooming, estimates, roadmap burndown | Velocity, capacity, sprint commitments |
-| **Watch now** | Intent health: which initiatives move, which stall; **rework as a spec signal** — when AI output keeps getting rejected, the intent was badly specified. That's a PM finding, not a developer failure. | Flow health: decision-queue depth and age, approved-but-idle work, WIP containment, board-vs-repo divergence (board says moving, repo says stopped — one of them is lying) |
-| **Value shift** | From writing tickets → to **sharpening intents** (ambiguity is now the most expensive defect) | From extracting status → to **clearing decision queues** |
+| **Watch now** | Intent health: which Intents move, which stall; **rework as a spec signal** — when AI output keeps getting rejected at validation, the Intent was badly specified. That's a PM finding, not a developer failure. | Flow health: decision-juncture queue depth and age, approved-but-idle Bolts, WIP containment, board-vs-repo divergence (board says moving, repo says stopped — one of them is lying) |
+| **Value shift** | From writing tickets → to **sharpening Intents** (ambiguity is now the most expensive defect) | From extracting status → to **clearing decision queues** |
 
 ## How the compass works
 
@@ -121,7 +129,21 @@ Every run starts with a **triage scan** across all dimensions, then leads with t
 | D6 WIP explosion | How many things are 80% done? | roadmap |
 | D7 Intent drift | What keeps being re-scoped after work started? | roadmap |
 
-D1–D4 are all faces of decision latency — the v1 metric.
+D1–D4 are all faces of decision latency — the v1 metric. In AI-DLC terms: D1–D3 measure time spent waiting *at a decision juncture* on a Bolt-scale change; D4 detects Units that stopped moving entirely.
+
+### Speaking AI-DLC on today's tools
+
+Most teams adopting AI-assisted delivery still work through GitHub/Jira/ADO — there is no "Bolt" object in any tracker yet. The compass bridges the vocabularies:
+
+| AI-DLC noun | What the compass reads today (GitHub) |
+|---|---|
+| **Intent** | An initiative: a milestone, epic-labelled issue, or linked issue cluster |
+| **Unit** | An issue — a cohesive piece of work with an owner |
+| **Bolt** | A pull request and its build–validate cycle |
+| **Decision juncture** | A review request, an approval gate, a merge, a validation comment |
+| **Mob Elaboration / Mob Construction** | Working sessions whose outputs land as issues and PRs |
+
+As trackers grow native AI-DLC artefacts (the [awslabs workflows](https://github.com/awslabs/aidlc-workflows) already persist intents, plans, and stories as files), the connectors read those directly — the metric model doesn't change.
 
 After the triage report, the manager can **drill down** ("why is X stalled?" → the compass walks the trail to the exact pending decision and names the one unblocking action) and optionally enter **nudge mode** — the compass drafts a short, neutral comment to the decision owner, shows it, and posts only on an explicit yes, one item at a time.
 

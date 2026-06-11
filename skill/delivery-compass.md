@@ -10,15 +10,15 @@ Direct, rapid visibility for project managers and delivery managers in AI-driven
 
 ## Why this skill exists (read this once — it is the operating model)
 
-Software delivery is moving from Scrum/Kanban to **AIDLC** (AI-Driven Development Lifecycle, per the AWS method definition) and FDE-style embedded delivery. In that world:
+Software delivery is moving from Scrum/Kanban to **AI-DLC** (AI-Driven Development Lifecycle, per the AWS method definition) and FDE-style embedded delivery. In that world:
 
 - Sprints become **Bolts** — iterations measured in hours/days, not weeks.
-- Work decomposes **Intent → Units → Bolts**, with AI doing decomposition and generation, humans validating at decision points.
-- Time-boxed ceremonies (standup, sprint planning, burndown, velocity) lose meaning: when a "story" takes 3 hours, story points and team velocity are noise.
+- Work decomposes **Intent → Units → Bolts** across three phases (Inception, Construction, Operations), with AI doing decomposition and generation, humans validating at **decision junctures** — where, per the whitepaper, human oversight acts "like a loss function", catching errors before they snowball.
+- Time-boxed ceremonies (standup, sprint planning, burndown, velocity) collapse into on-demand working sessions (Mob Elaboration, Mob Construction): when a "story" takes 3 hours, story points and team velocity are noise.
 
-**What survives:** flow metrics. **What's new:** in AIDLC, truth about progress no longer lives in people's heads (extracted via ceremonies) — it lives in the artefacts themselves: issues, PRs, plans, commits. They are machine-readable and timestamped. A manager doesn't need a standup; they need a reader at the right altitude. This skill is that reader.
+**What survives:** flow metrics. **What's new:** in AI-DLC, truth about progress no longer lives in people's heads (extracted via ceremonies) — it lives in the artefacts themselves: intents, plans, issues, PRs, commits. They are machine-readable and timestamped. A manager doesn't need a standup; they need a reader at the right altitude. This skill is that reader.
 
-**The new #1 bottleneck is decision latency.** When AI generates work in hours, the constraint shifts to the humans who must approve, review, and validate. Work doesn't stall in development anymore — it stalls *waiting for a decision*. Measuring how long artefacts sit at human decision points replaces velocity as the primary delivery health signal.
+**The new #1 bottleneck is decision latency.** When AI generates work in hours, the constraint shifts to the decision junctures — the humans who must approve, review, and validate. Work doesn't stall in development anymore — it stalls *waiting for a decision*. Measuring how long artefacts sit at decision junctures replaces velocity as the primary delivery health signal.
 
 The manager's value shifts accordingly: from extracting and relaying status → to **clearing decision queues, sharpening intents, and managing WIP**. This skill makes those three things visible.
 
@@ -47,7 +47,7 @@ Every run starts with a triage scan across all dimensions, then points the user 
 | D6 WIP explosion | Too many things 80% done (AI makes starting work free) | ⏳ later |
 | D7 Intent drift | Scope edited repeatedly after work started | ⏳ later |
 
-D1–D4 are all faces of **decision latency** — the v1 metric.
+D1–D4 are all faces of **decision latency** — the v1 metric. In AI-DLC terms: D1–D3 are queues at decision junctures on Bolt-scale changes (a PR ≈ a Bolt's build–validate cycle); D4 detects Units (issues) that stopped moving. Until trackers grow native AI-DLC artefacts, the GitHub mapping is: Intent ≈ milestone/epic-cluster, Unit ≈ issue, Bolt ≈ PR, decision juncture ≈ review/approval/merge gate.
 
 ---
 
